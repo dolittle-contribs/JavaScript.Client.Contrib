@@ -1,0 +1,51 @@
+{
+  "name": "@dolittle/contrib",
+  "version": "1.0.0",
+  "description": "",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/commonjs/index.js",
+  "module": "dist/esmodule/index.js",
+  "jspm": {
+    "registry": "npm",
+    "jspmPackage": true,
+    "format": "amd",
+    "main": "index",
+    "directories": {
+      "dist": "dist/systemjs"
+    },
+    "dependencies": {
+      "@dolittle/commands": "^1.0.15",
+      "@dolittle/core": "^1.0.5",
+      "@dolittle/queries": "^1.0.16",
+      "@dolittle/readmodels": "^1.0.2"
+    }
+  },
+  "scripts": {
+    "build": "gulp build",
+    "prepublish": "yarn build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dolittle-contribs/javascript.client.contrib.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dolittle-contribs/javascript.client.contrib/issues"
+  },
+  "homepage": "https://github.com/dolittle-contribs/javascript.client.contrib#readme",
+  "dependencies": {
+    "@dolittle/commands": "^1.0.15",
+    "@dolittle/core": "^1.0.5",
+    "@dolittle/queries": "^1.0.16",
+    "@dolittle/readmodels": "^1.0.2"
+  },
+  "devDependencies": {
+    "@dolittle/build": "^6.3.4"
+  },
+  "files": [
+    "dist"
+  ]
+}
