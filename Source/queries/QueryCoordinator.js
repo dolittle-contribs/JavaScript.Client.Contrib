@@ -5,6 +5,7 @@
 import { Query, QueryRequest } from '@dolittle/queries';
 
 const beforeExecuteCallbacks = [];
+let responseHandlerCallback = undefined;
 
 /**
  * Represents the coordinator of queries
@@ -20,6 +21,13 @@ export class QueryCoordinator {
         beforeExecuteCallbacks.push(callback);
     }
 
+    /**
+     * Add a callback that handles the response coming back from the fetch request. The returned value will be used in the regular request chain
+     * @param {function} callback
+     */
+    static responseHandler(callback) {
+        responseHandlerCallback = callback;
+    }
     
     /**
      * Execute a query
@@ -37,6 +45,7 @@ export class QueryCoordinator {
 
         beforeExecuteCallbacks.forEach(_ => _(options));
 
-        return fetch(`${QueryCoordinator.apiBaseUrl}/api/Dolittle/Queries`, options).then(response => response.json());
+        return fetch(`${QueryCoordinator.apiBaseUrl}/api/Dolittle/Queries`, options)
+            .then(response => responseHandlerCallback ? responseHandlerCallback(response) : response.json());
     }
 }

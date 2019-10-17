@@ -2,10 +2,10 @@
  *  Copyright (c) Dolittle. All rights reserved.
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-import { QueryCoordinator } from '../QueryCoordinator';
+import { CommandCoordinator } from '../CommandCoordinator';
 
-describe('when_executing_with_response_handler_callback', () => {
-    let queryResult = { 'something': 'result' };
+describe('when handling with response handler callback', () => {
+    let commandResult = {'something': 'result'};
     let requestUsed = null;
     let fetchOptions = null;
     global.fetch = (request, options) => {
@@ -15,7 +15,7 @@ describe('when_executing_with_response_handler_callback', () => {
             then: (callback) => {
                 let result = callback({
                     json: () => {
-                        return queryResult;
+                        return commandResult;
                     }
                 });
 
@@ -27,16 +27,14 @@ describe('when_executing_with_response_handler_callback', () => {
             }
         }
     };
-
-    let queryCoordinator = new QueryCoordinator();
+    let commandCoordinator = new CommandCoordinator();
+    let command = {};
     let result = null;
-    let query = {};
 
     (async beforeEach => {
-        QueryCoordinator.responseHandler((response) => "my response");
-        result = await queryCoordinator.execute(query);
+        CommandCoordinator.responseHandler((response) => "my response");
+        result = await commandCoordinator.handle(command);
     })();
 
     it("should call the response handler", () => result.should.equal("my response"));
-
-})
+});
