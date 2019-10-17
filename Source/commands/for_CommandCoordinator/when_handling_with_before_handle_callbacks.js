@@ -16,21 +16,7 @@ describe('when handling with before handle callbacks', () => {
     global.fetch = (request, options) => {
         requestUsed = request;
         fetchOptions = options;
-        return {
-            then: (callback) => {
-                let result = callback({
-                    json: () => {
-                        return commandResult;
-                    }
-                });
-
-                return {
-                    then: (callback) => {
-                        callback(result);
-                    }
-                }
-            }
-        }
+        return Promise.resolve({ json: () => commandResult });
     };
     let commandCoordinator = new CommandCoordinator();
     let command = {};
@@ -41,7 +27,7 @@ describe('when handling with before handle callbacks', () => {
 
 
 
-    (beforeEach => {
+    (async beforeEach => {
         first_callback = sinon.spy(options => {
             options.headers[firstHeaderKey] = firstHeaderValue;
         });
@@ -50,7 +36,7 @@ describe('when handling with before handle callbacks', () => {
         });
         CommandCoordinator.beforeHandle(first_callback);
         CommandCoordinator.beforeHandle(second_callback);
-        commandCoordinator.handle(command).then(r => result = r);
+        result = await commandCoordinator.handle(command)
     })();
 
     it('call the first callback', () => first_callback.called.should.be.true);

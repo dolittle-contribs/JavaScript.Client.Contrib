@@ -11,28 +11,14 @@ describe('when handling', () => {
     global.fetch = (request, options) => {
         requestUsed = request;
         fetchOptions = options;
-        return {
-            then: (callback) => {
-                let result = callback({
-                    json: () => {
-                        return commandResult;
-                    }
-                });
-
-                return {
-                    then: (callback) => {
-                        callback(result);
-                    }
-                }
-            }
-        }
+        return Promise.resolve({ json: () => commandResult });
     };
     let commandCoordinator = new CommandCoordinator();
     let command = {};
     let result = null;
 
-    (beforeEach => {
-        commandCoordinator.handle(command).then(r => result = r);
+    (async beforeEach => {
+        result = await commandCoordinator.handle(command)
     })();
 
     it("should pass along the result", () => result.should.equal(commandResult));

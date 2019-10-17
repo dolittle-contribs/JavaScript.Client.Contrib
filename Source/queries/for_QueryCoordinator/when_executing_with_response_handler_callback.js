@@ -6,26 +6,8 @@ import { QueryCoordinator } from '../QueryCoordinator';
 
 describe('when_executing_with_response_handler_callback', () => {
     let queryResult = { 'something': 'result' };
-    let requestUsed = null;
-    let fetchOptions = null;
     global.fetch = (request, options) => {
-        requestUsed = request;
-        fetchOptions = options;
-        return {
-            then: (callback) => {
-                let result = callback({
-                    json: () => {
-                        return queryResult;
-                    }
-                });
-
-                return {
-                    then: (callback) => {
-                        callback(result);
-                    }
-                }
-            }
-        }
+        return Promise.resolve({json: () => queryResult});
     };
 
     let queryCoordinator = new QueryCoordinator();

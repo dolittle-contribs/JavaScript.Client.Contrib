@@ -2,38 +2,24 @@
  *  Copyright (c) Dolittle. All rights reserved.
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-import { CommandCoordinator } from '../CommandCoordinator';
+import { QueryCoordinator } from '../QueryCoordinator';
 
 describe('when executing with custom response handler', () => {
-    let commandResult = {'something': 'result'};
+    let queryResult = { 'something': 'result' };
     let requestUsed = null;
     let fetchOptions = null;
     global.fetch = (request, options) => {
         requestUsed = request;
         fetchOptions = options;
-        return {
-            then: (callback) => {
-                let result = callback({
-                    json: () => {
-                        return commandResult;
-                    }
-                });
-
-                return {
-                    then: (callback) => {
-                        callback(result);
-                    }
-                }
-            }
-        }
+        return Promise.resolve({json: () => queryResult});
     };
-    let commandCoordinator = new CommandCoordinator();
-    let command = {};
+    let queryCoordinator = new QueryCoordinator();
+    let query = {};
     let result = null;
 
     (async beforeEach => {
-        CommandCoordinator.responseHandler(response => "my response");
-        result = await commandCoordinator.handle(command);
+        QueryCoordinator.responseHandler(response => "my response");
+        result = await queryCoordinator.execute(query);
     })();
 
     it("should call the custom handler", () => result.should.equal("my response"));

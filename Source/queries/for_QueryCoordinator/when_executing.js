@@ -11,29 +11,15 @@ describe('when_executing', () => {
     global.fetch = (request, options) => {
         requestUsed = request;
         fetchOptions = options;
-        return {
-            then: (callback) => {
-                let result = callback({
-                    json: () => {
-                        return queryResult;
-                    }
-                });
-
-                return {
-                    then: (callback) => {
-                        callback(result);
-                    }
-                }
-            }
-        }
+        return Promise.resolve({json: () => queryResult});
     };
 
     let queryCoordinator = new QueryCoordinator();
     let result = null;
     let query = {};
 
-    (beforeEach => {
-        queryCoordinator.execute(query).then(r => result = r);
+    (async beforeEach => {
+        result = await queryCoordinator.execute(query)
     })();
 
     it('should pass an options object', () => fetchOptions.should.be.defined);

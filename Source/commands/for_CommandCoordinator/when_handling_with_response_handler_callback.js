@@ -6,26 +6,8 @@ import { CommandCoordinator } from '../CommandCoordinator';
 
 describe('when handling with response handler callback', () => {
     let commandResult = {'something': 'result'};
-    let requestUsed = null;
-    let fetchOptions = null;
     global.fetch = (request, options) => {
-        requestUsed = request;
-        fetchOptions = options;
-        return {
-            then: (callback) => {
-                let result = callback({
-                    json: () => {
-                        return commandResult;
-                    }
-                });
-
-                return {
-                    then: (callback) => {
-                        callback(result);
-                    }
-                }
-            }
-        }
+        return Promise.resolve({ json: () => commandResult });
     };
     let commandCoordinator = new CommandCoordinator();
     let command = {};
