@@ -1,4 +1,4 @@
-# Aurelia Client Contrib Support
+# Client Contrib Support
 
 This project serves as a place to experiment and play with practical shared functionality that augments the JavaScript.Client package and exposes practical shared building blocks that makes developing applications easier.
 
